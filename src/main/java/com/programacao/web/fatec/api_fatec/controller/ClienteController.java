@@ -1,5 +1,9 @@
 package com.programacao.web.fatec.api_fatec.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,10 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
+    
+    private List<Cliente> listaDeCliente = new ArrayList<>();
+
+    public ClienteController() {
+        listaDeCliente.add(new Cliente(94L, "Nicolas"));
+        
+    }
 
     @GetMapping("/cpf/{idade}")
     public String clienteCpf(@PathVariable int idade){
@@ -24,6 +38,12 @@ public class ClienteController {
         }
     }
 
+    @GetMapping("/listar")
+    public List<Cliente> listarClientes() {
+        return listaDeCliente;
+    }
+    
+
     @GetMapping("/cnpj/{nome}")
     public String clienteCnpj(@PathVariable String nome){
         return "Cliente CNPJ: " + nome;
@@ -33,6 +53,35 @@ public class ClienteController {
     public Cliente createCliente(@RequestBody Cliente cliente){
 
         return cliente;
+    }
+
+    @PostMapping("/criarCliente")
+    public List<Cliente> criarCliente(@RequestBody Cliente cliente) {
+        listaDeCliente.add(new Cliente(cliente.getId(), cliente.getNome()));
+        return listaDeCliente;
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public String deletarCliente(@PathVariable Long id){
+        for (Cliente cliente : listaDeCliente) {
+            if(cliente.getId() == id){
+                listaDeCliente.remove(cliente);
+                return id + ": deletado!";
+            }
+        }
+        return "ID " + id + " não encontrado";
+    }
+    
+    @PutMapping("/atualizar/{id}")
+    public String alterarCliente(@PathVariable Long id, @RequestBody Cliente entity) {
+        for (Cliente cliente : listaDeCliente) {
+            if (cliente.getId() == id) {
+                cliente.setId(entity.getId());
+                cliente.setNome(entity.getNome());
+                return "Cliente alterado";
+            }
+        }
+        return "Cliente não encontrado";
     }
 
     
