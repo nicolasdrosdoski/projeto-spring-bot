@@ -3,6 +3,7 @@ package com.programacao.web.fatec.api_fatec.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteRepository;
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -20,10 +22,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/api/clientes")
 public class ClienteController {
     
-    private List<Cliente> listaDeCliente = new ArrayList<>();
+    private final List<Cliente> listaDeCliente = new ArrayList<>();
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     public ClienteController() {
-        listaDeCliente.add(new Cliente(94L, "Nicolas"));
+        listaDeCliente.add(new Cliente(94L, "Nicolas", "Rua João Barth"));
         
     }
 
@@ -57,7 +62,7 @@ public class ClienteController {
 
     @PostMapping("/criarCliente")
     public List<Cliente> criarCliente(@RequestBody Cliente cliente) {
-        listaDeCliente.add(new Cliente(cliente.getId(), cliente.getNome()));
+        listaDeCliente.add(new Cliente(cliente.getId(), cliente.getNome(), cliente.getEndereco()));
         return listaDeCliente;
     }
 
