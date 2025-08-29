@@ -1,36 +1,29 @@
-###
-GET http://localhost:8080/api/clientes/cpf/81
-
-###
-POST http://localhost:8080/api/clientes
-Content-Type: application/json
-
-{
-    "id": 1,
-    "nome": "Nicolas"
-}
-
-###
+### LISTAR CLIENTE
 GET http://localhost:8080/api/clientes/listar
 
-
-###
+### CRIAR CLIENTE
 POST http://localhost:8080/api/clientes/criarCliente
 Content-Type: application/json
 
 {
-    "id": 111,
-    "nome": "Amanda"
+    "id": null,
+    "nome": "Carminha",
+    "endereco": "Avenida Brasil"
 }
 
-###
-DELETE http://localhost:8080/api/clientes/deletar/111
+### LISTAR CLIENTE POR NOME
+GET http://localhost:8080/api/clientes/Maria
 
-###
-PUT http://localhost:8080/api/clientes/atualizar/94
+
+### ATUALIZAR CLIENTE
+PUT http://localhost:8080/api/clientes/atualizar
 Content-Type: application/json
 
 {
-    "id": 11,
-    "nome": "Nicolas Drosdoski"
+    "id": 1,
+    "nome": "Café",
+    "endereco": "Virgilio de Rezende"
 }
+
+### DELETAR CLIENTE
+DELETE http://localhost:8080/api/clientes/deletar/4
