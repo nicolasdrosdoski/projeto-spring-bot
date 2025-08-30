@@ -1,13 +1,16 @@
 ### LISTAR CLIENTE
 GET http://localhost:8080/api/clientes/listar
 
+### BUSCAR CLIENTE POR NOME OU ID
+GET http://localhost:8080/api/clientes/buscarPorIdNome/1
+
 ### CRIAR CLIENTE
 POST http://localhost:8080/api/clientes/criarCliente
 Content-Type: application/json
 
 {
     "id": null,
-    "nome": "Carminha",
+    "nome": "Carminha1",
     "endereco": "Avenida Brasil"
 }
 
@@ -26,4 +29,4 @@ Content-Type: application/json
 }
 
 ### DELETAR CLIENTE
-DELETE http://localhost:8080/api/clientes/deletar/77
+DELETE http://localhost:8080/api/clientes/deletar/4

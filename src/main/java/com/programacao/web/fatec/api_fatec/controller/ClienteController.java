@@ -1,6 +1,5 @@
 package com.programacao.web.fatec.api_fatec.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class ClienteController {
     }
 
     //* CRUD - Leitura de clientes por nome
-    @GetMapping("/{nome}")
+    @GetMapping("/listar/{nome}")
     public List<Cliente> listarClientesPorNome(@PathVariable String nome){
         return clienteRepository.findByNome(nome);
     }
@@ -99,6 +98,17 @@ public class ClienteController {
         
         clienteRepository.deleteById(id);
         return "Cliente deletado";
+    }
+
+    @GetMapping("/buscarPorIdNome/{search}")
+    public List<Cliente> buscarPorIdNomeGenerico(@PathVariable String search){
+        Long id = null;
+        try {
+            id = Long.parseLong(search);
+        } catch (Exception e) {
+            
+        }
+        return clienteRepository.buscarPorIdOuNome(id, search);
     }
     
 }
