@@ -26,4 +26,4 @@ Content-Type: application/json
 }
 
 ### DELETAR CLIENTE
-DELETE http://localhost:8080/api/clientes/deletar/4
+DELETE http://localhost:8080/api/clientes/deletar/77

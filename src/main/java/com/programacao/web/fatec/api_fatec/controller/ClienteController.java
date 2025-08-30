@@ -2,6 +2,7 @@ package com.programacao.web.fatec.api_fatec.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,15 +25,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
-    
-    private final List<Cliente> listaDeCliente = new ArrayList<>();
 
     @Autowired
     private ClienteRepository clienteRepository;
-
-    // public ClienteController() {
-    //     listaDeCliente.add(new Cliente(94L, "Nicolas", "Rua João Barth"));
-    // }
 
     @PostConstruct
     public void dadosIniciais(){
@@ -80,72 +75,30 @@ public class ClienteController {
         }
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public String deletarCliente(@PathVariable Long id){
-        try {
-            clienteRepository.deleteById(id);
-            return "Cliente deletado com sucesso";
-        } catch (Exception e) {
-            System.out.printf("Erro: %s", e);
-            return "Erro ao deletar cliente";
-        }
-    }
-
-    // @GetMapping("/cpf/{idade}")
-    // public String clienteCpf(@PathVariable int idade){
-    //     if(idade >= 18){
-    //         return "Cliente maior de idade";
-    //     } else if(idade < 0) {
-    //         return "Ta morto!";
-    //     } else{
-    //         return "Cliente menor de idade";
-    //     }
-    // }
-
-
-    // @GetMapping("/cnpj/{nome}")
-    // public String clienteCnpj(@PathVariable String nome){
-    //     return "Cliente CNPJ: " + nome;
-    // }
-
-    // @PostMapping("")
-    // public Cliente createCliente(@RequestBody Cliente cliente){
-
-    //     return cliente;
-    // }
-
-    // @PostMapping("/criarCliente")
-    // public List<Cliente> criarCliente(@RequestBody Cliente cliente) {
-    //     listaDeCliente.add(new Cliente(cliente.getId(), cliente.getNome(), cliente.getEndereco()));
-    //     return listaDeCliente;
-    // }
-
+    //* CRUD FORMA 2 - Atualizar cliente
     @PutMapping("/atualizar/{id}")
     public String alterarCliente(@PathVariable Long id, @RequestBody Cliente entity) {
-        for (Cliente cliente : listaDeCliente) {
-            if (cliente.getId() == id) {
-                cliente.setId(entity.getId());
-                cliente.setNome(entity.getNome());
-                return "Cliente alterado";
-            }
+        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
+        if (!clienteEncontrado.isPresent()) {
+            return String.format("Cliente não encontrado: {}", id);
         }
-        return "Cliente não encontrado";
+        
+        entity.setId(id);
+        clienteRepository.save(entity);
+        return "Cliente alterado";
+        
     }
 
-    // @DeleteMapping("/deletar/{id}")
-    // public String deletarCliente(@PathVariable Long id){
-    //     for (Cliente cliente : listaDeCliente) {
-    //         if(cliente.getId() == id){
-    //             listaDeCliente.remove(cliente);
-    //             return id + ": deletado!";
-
-    //         }
-    //     }
-    //     return "ID " + id + " não encontrado";
-    // }
-
-    
-    
-
+    //* CRUD - Deletar por ID
+    @DeleteMapping("/deletar/{id}")
+    public String deletarCliente(@PathVariable Long id){
+        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
+        if (!clienteEncontrado.isPresent()) {
+            return String.format("Cliente não encontrado: %d", id);
+        }
+        
+        clienteRepository.deleteById(id);
+        return "Cliente deletado";
+    }
     
 }
