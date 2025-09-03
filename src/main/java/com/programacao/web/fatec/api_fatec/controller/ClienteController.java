@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programacao.web.fatec.api_fatec.domain.cidade.CidadeRepository;
 import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteRepository;
+import com.programacao.web.fatec.api_fatec.entities.Cidade;
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
+import com.programacao.web.fatec.api_fatec.entities.Estado;
 
 import jakarta.annotation.PostConstruct;
 
@@ -28,12 +31,25 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private CidadeRepository cidadeRepository;
+
     @PostConstruct
     public void dadosIniciais(){
-        clienteRepository.save(new Cliente(null, "Nicolas", "Rua Barth 1"));
-        clienteRepository.save(new Cliente(null, "Maria", "Rua Barth 2"));
-        clienteRepository.save(new Cliente(null, "Eduarda", "Rua Barth 3"));
-        clienteRepository.save(new Cliente(null, "Joao", "Rua Barth 4"));
+        // Criando 5 cidades de exemplo com diferentes estados
+        Cidade saoPaulo = cidadeRepository.save(new Cidade(null, "São Paulo", Estado.SP));
+        Cidade rioDeJaneiro = cidadeRepository.save(new Cidade(null, "Rio de Janeiro", Estado.RJ));
+        Cidade beloHorizonte = cidadeRepository.save(new Cidade(null, "Belo Horizonte", Estado.MG));
+        Cidade salvador = cidadeRepository.save(new Cidade(null, "Salvador", Estado.BA));
+        Cidade fortaleza = cidadeRepository.save(new Cidade(null, "Fortaleza", Estado.CE));
+
+        // Criando clientes associados às cidades
+        // Observe como o relacionamento é estabelecido passando a cidade como parâmetro
+        clienteRepository.save(new Cliente(null, "Danilo", "Av. Paulista, 1000", saoPaulo));
+        clienteRepository.save(new Cliente(null, "Maria", "Rua Copacabana, 500", rioDeJaneiro));
+        clienteRepository.save(new Cliente(null, "João", "Av. Afonso Pena, 123", beloHorizonte));
+        clienteRepository.save(new Cliente(null, "Ana", "Rua Chile, 45", salvador));
+        clienteRepository.save(new Cliente(null, "Pedro", "Av. Beira Mar, 789", fortaleza));
     }
 
     
