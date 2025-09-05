@@ -27,6 +27,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Cidade {
     
     @Id
@@ -55,7 +56,6 @@ public class Cidade {
 
     /**
      * Construtor para criar uma cidade sem clientes inicialmente.
-     * 
      * @param id O ID da cidade (pode ser null para novas cidades)
      * @param nome O nome da cidade
      * @param estado O estado ao qual a cidade pertence

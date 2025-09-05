@@ -30,3 +30,6 @@ Content-Type: application/json
 
 ### DELETAR CLIENTE
 DELETE http://localhost:8080/api/clientes/deletar/4
+
+### Teste com ID
+GET http://localhost:8080/api/clientes/buscarPorTexto?texto=1

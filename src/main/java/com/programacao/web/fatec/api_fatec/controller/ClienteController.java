@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.programacao.web.fatec.api_fatec.domain.cidade.CidadeRepository;
 import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteRepository;
+import com.programacao.web.fatec.api_fatec.domain.cliente.dto.BuscaPorIdOuNomeDto;
 import com.programacao.web.fatec.api_fatec.entities.Cidade;
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
 import com.programacao.web.fatec.api_fatec.entities.Estado;
@@ -78,6 +79,23 @@ public class ClienteController {
         }
     }
 
+    @GetMapping("/buscaPorIdOuNome/{search}")
+    public List<Cliente> buscaPorIdOuNomeGenerico(@PathVariable String search) {
+        Long id = null;
+        try {
+            id = Long.parseLong(search);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+        return clienteRepository.buscarPorIdOuNome(id, search);
+    }
+
+    @PostMapping("/buscarIdOuNome")
+    public List<Cliente> buscarPorIdOuNome(@RequestBody BuscaPorIdOuNomeDto dto){
+        return clienteRepository.buscarPorIdOuNome(dto.getId(), dto.getNome());
+    }
+
     //* CRUD - Atualizar cliente
     @PutMapping("/atualizar")
     public String atualizarCliente(@RequestBody Cliente cliente){
@@ -101,7 +119,6 @@ public class ClienteController {
         entity.setId(id);
         clienteRepository.save(entity);
         return "Cliente alterado";
-        
     }
 
     //* CRUD - Deletar por ID

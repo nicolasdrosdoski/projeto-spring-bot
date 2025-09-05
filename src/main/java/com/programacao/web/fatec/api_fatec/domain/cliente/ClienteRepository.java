@@ -10,11 +10,13 @@ import com.programacao.web.fatec.api_fatec.entities.Cliente;
 
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
+
+    @Query("select c from Cliente c where c.cidade.id = :cidadeId")
     List<Cliente> findByNome(String nome);
 
     @Query("""
-        select c from Cliente c
-        where (:id is null or c.id = :id) or lower(c.nome) like lower (concat('%', :nome, '%')) 
+        SELECT c FROM Cliente c
+        WHERE (:id IS NULL OR c.id = :id) OR LOWER(c.nome) LIKE LOWER (concat('%', :nome, '%')) 
             """)
     List<Cliente> buscarPorIdOuNome(@Param("id") Long id, @Param("nome") String nome);
 }
