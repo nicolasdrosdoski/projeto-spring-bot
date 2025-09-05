@@ -1,5 +1,6 @@
 package com.programacao.web.fatec.api_fatec.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -84,6 +85,7 @@ public class Cliente {
     @ManyToOne
     @JoinColumn(name = "cidade_id")
     @JsonIgnoreProperties("clientes")
+    @JsonBackReference
     // Descomente a linha abaixo para obter o FORMATO 1 (sem o objeto cidade)
     //@JsonIgnore
     private Cidade cidade;

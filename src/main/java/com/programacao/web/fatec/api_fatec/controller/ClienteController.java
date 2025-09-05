@@ -1,7 +1,6 @@
 package com.programacao.web.fatec.api_fatec.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programacao.web.fatec.api_fatec.domain.cidade.CidadeRepository;
+import com.programacao.web.fatec.api_fatec.domain.cidade.ClienteService;
 import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteRepository;
-import com.programacao.web.fatec.api_fatec.domain.cliente.dto.BuscaPorIdOuNomeDto;
 import com.programacao.web.fatec.api_fatec.entities.Cidade;
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
 import com.programacao.web.fatec.api_fatec.entities.Estado;
@@ -34,6 +33,9 @@ public class ClienteController {
 
     @Autowired
     private CidadeRepository cidadeRepository;
+
+    @Autowired
+    private ClienteService clienteService;
 
     @PostConstruct
     public void dadosIniciais(){
@@ -55,93 +57,46 @@ public class ClienteController {
 
     
 
-    //* CRUD - Leitura de clientes
+    //* Leitura de clientes
     @GetMapping("/listar")
     public List<Cliente> listarClientes(){
-        return clienteRepository.findAll();
+        return clienteService.listarClientes();
+    }
+
+    //* Buscar por Nome ou ID
+    @GetMapping("/buscaPorIdOuNome/{search}")
+    public List<Cliente> buscaPorIdOuNomeGenerico(@PathVariable String search) {
+        return clienteService.buscaPorIdOuNomeGenerico(search);
     }
 
     //* CRUD - Leitura de clientes por nome
     @GetMapping("/listar/{nome}")
     public List<Cliente> listarClientesPorNome(@PathVariable String nome){
-        return clienteRepository.findByNome(nome);
+        return clienteService.listarClientesPorNome(nome);
+    }
+
+    //* CRUD - Buscar por texto
+    @GetMapping("/buscarPorTexto/")
+    public List<Cliente> buscarPorTexto(@PathVariable String texto) {
+        return clienteService.buscarPorTexto(texto);
     }
 
     //* CRUD - Criar Cliente
-    @PostMapping("/criarCliente")
-    public String criarCliente(@RequestBody Cliente cliente){
-        try {
-            clienteRepository.save(cliente);
-        return "Cliente salvo";
-        } catch (Exception e) {
-            System.out.printf("Erro: %s", e);
-            return "Erro ao salvar cliente";
-        }
+    @PostMapping("")
+    public Cliente createCliente(@RequestBody Cliente cliente) {
+        return clienteService.createCliente(cliente);
     }
 
-    @GetMapping("/buscaPorIdOuNome/{search}")
-    public List<Cliente> buscaPorIdOuNomeGenerico(@PathVariable String search) {
-        Long id = null;
-        try {
-            id = Long.parseLong(search);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-
-        return clienteRepository.buscarPorIdOuNome(id, search);
-    }
-
-    @PostMapping("/buscarIdOuNome")
-    public List<Cliente> buscarPorIdOuNome(@RequestBody BuscaPorIdOuNomeDto dto){
-        return clienteRepository.buscarPorIdOuNome(dto.getId(), dto.getNome());
+    //* CRUD - Deletar cliente
+    @DeleteMapping("/{id}")
+    public String deletarCliente(@PathVariable Long id) {
+        return clienteService.deletarCliente(id);
     }
 
     //* CRUD - Atualizar cliente
-    @PutMapping("/atualizar")
-    public String atualizarCliente(@RequestBody Cliente cliente){
-        try {
-            clienteRepository.save(cliente);
-            return "Cliente atualizado com sucesso";
-        } catch (Exception e) {
-            System.out.printf("Erro: %s", e);
-            return "Erro ao atualizar cliente";
-        }
-    }
-
-    //* CRUD FORMA 2 - Atualizar cliente
-    @PutMapping("/atualizar/{id}")
+    @PutMapping("/{id}")
     public String alterarCliente(@PathVariable Long id, @RequestBody Cliente entity) {
-        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
-        if (!clienteEncontrado.isPresent()) {
-            return String.format("Cliente não encontrado: {}", id);
-        }
-        
-        entity.setId(id);
-        clienteRepository.save(entity);
-        return "Cliente alterado";
-    }
-
-    //* CRUD - Deletar por ID
-    @DeleteMapping("/deletar/{id}")
-    public String deletarCliente(@PathVariable Long id){
-        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
-        if (!clienteEncontrado.isPresent()) {
-            return String.format("Cliente não encontrado: %d", id);
-        }
-        
-        clienteRepository.deleteById(id);
-        return "Cliente deletado";
-    }
-
-    @GetMapping("/buscarPorIdNome/{search}")
-    public List<Cliente> buscarPorIdNomeGenerico(@PathVariable String search){
-        Long id = null;
-        try {
-            id = Long.parseLong(search);
-        } catch (Exception e) {
-            
-        }
-        return clienteRepository.buscarPorIdOuNome(id, search);
+        return clienteService.alterarCliente(id, entity);
     }
     
 }

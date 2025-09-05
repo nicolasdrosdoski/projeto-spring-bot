@@ -2,16 +2,25 @@
 GET http://localhost:8080/api/clientes/listar
 
 ### BUSCAR CLIENTE POR NOME OU ID
-GET http://localhost:8080/api/clientes/buscarPorIdNome/1
+GET http://localhost:8080/api/clientes/buscaPorIdOuNome/1
+
+### LEITURA DE CLIENTES POR NOME
+GET http://localhost:8080/api/clientes/listar/Maria
+
+### BUSCAR POR TEXTO
+GET http://localhost:8080/api/clientes/buscarPorTexto/Maria
 
 ### CRIAR CLIENTE
-POST http://localhost:8080/api/clientes/criarCliente
+POST http://localhost:8080/api/clientes
 Content-Type: application/json
 
 {
     "id": null,
-    "nome": "Carminha1",
-    "endereco": "Avenida Brasil"
+    "nome": "EDuarda",
+    "endereco": "Avenida Brasil",
+    "cidade": {
+        "id": 1
+    }
 }
 
 ### LISTAR CLIENTE POR NOME
