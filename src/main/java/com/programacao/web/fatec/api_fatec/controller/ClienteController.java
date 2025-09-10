@@ -91,6 +91,7 @@ public class ClienteController {
     @DeleteMapping("/{id}")
     public String deletarCliente(@PathVariable Long id) {
         return clienteService.deletarCliente(id);
+        
     }
 
     //* CRUD - Atualizar cliente
